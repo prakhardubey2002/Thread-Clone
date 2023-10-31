@@ -1,8 +1,10 @@
-import { Image, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import { Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", alignItems: "center" }} >
       <View style={{ marginTop: 50 }} >
@@ -41,8 +43,11 @@ const LoginScreen = () => {
               style={{
                 color: "gray",
                 marginVertical: 10,
-                width: 300
+                width: 300,
+                fontSize: email ? 16 : 16
               }}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
               placeholder='Enter your email'
             />
           </View>
@@ -70,8 +75,11 @@ const LoginScreen = () => {
                 style={{
                   color: "gray",
                   marginVertical: 10,
-                  width: 300
+                  width: 300,
+                  fontSize: password ? 16 : 16,
                 }}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
                 placeholder='Password'
               />
             </View>
@@ -83,8 +91,43 @@ const LoginScreen = () => {
             marginBottom: 12
           }} >
             <Text>Keep me logged in</Text>
-            <Text style={{fontWeight:500,color:"#007FFF"}} >Forget Password</Text>
+            <Text style={{ fontWeight: 500, color: "#007FFF" }} >Forget Password</Text>
           </View>
+        </View>
+        <View style={{ marginTop: 45 }} >
+          <Pressable style={{
+            width: 200,
+            backgroundColor: "black",
+            padding: 15,
+            marginTop: 40,
+            marginLeft: "auto",
+            marginRight: "auto",
+            borderRadius: 6,
+            flexDirection: "row",
+            gap: 8,
+            justifyContent: "center",
+            alignItems: "center"
+          }} >
+            <AntDesign name="login" size={20} color="white" />
+            <Text style={{
+              color: "#fff",
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: 16,
+
+
+            }} >Login</Text>
+          </Pressable>
+          <Pressable style={{ marginTop: 10 }} >
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 16
+              }}
+            >
+              Don't have an account? Sign up
+            </Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
