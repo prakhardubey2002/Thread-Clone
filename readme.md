@@ -1,3 +1,6 @@
+## Eas Json for Android Preview
+
+```javascript
 {
   "build": {
     "preview": {
@@ -13,6 +16,13 @@
     "preview3": {
       "developmentClient": true
     },
-    "production": {}
- }
+    "production": {}
+  }
 }
+```
+
+## Command to produce apk build for Android
+
+```bash
+eas build -p android --profile preview
+```
