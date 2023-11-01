@@ -2,9 +2,11 @@ import { Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text,
 import React, { useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", alignItems: "center" }} >
       <View style={{ marginTop: 50 }} >
@@ -72,6 +74,7 @@ const LoginScreen = () => {
                 size={24}
                 color="gray" />
               <TextInput
+              secureTextEntry={true}
                 style={{
                   color: "gray",
                   marginVertical: 10,
@@ -118,7 +121,7 @@ const LoginScreen = () => {
 
             }} >Login</Text>
           </Pressable>
-          <Pressable style={{ marginTop: 10 }} >
+          <Pressable onPress={()=>navigation.navigate("Register")}  style={{ marginTop: 10 }} >
             <Text
               style={{
                 textAlign: "center",
