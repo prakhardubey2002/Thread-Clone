@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express=require('express');
 const bodyParser=require('body-parser');
 const mongoose=require('mongoose');
@@ -13,7 +14,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json());
 const jwt = require("jsonwebtoken");
-mongoose.connect("mongodb+srv://Thread:Thread@cluster0.b61s0jk.mongodb.net/?retryWrites=true&w=majority",{
+mongoose.connect(process.env.MONGO_URI,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
 }).then(()=>{

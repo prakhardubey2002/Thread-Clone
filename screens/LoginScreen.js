@@ -74,7 +74,7 @@ const LoginScreen = () => {
                 size={24}
                 color="gray" />
               <TextInput
-              secureTextEntry={true}
+                secureTextEntry={true}
                 style={{
                   color: "gray",
                   marginVertical: 10,
@@ -121,7 +121,7 @@ const LoginScreen = () => {
 
             }} >Login</Text>
           </Pressable>
-          <Pressable onPress={()=>navigation.navigate("Register")}  style={{ marginTop: 10 }} >
+          <Pressable onPress={() => navigation.navigate("Register")} style={{ marginTop: 10 }} >
             <Text
               style={{
                 textAlign: "center",
