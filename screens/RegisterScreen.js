@@ -1,14 +1,32 @@
-import { Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name,setName]=useState("");
+  const [name, setName] = useState("");
   const navigation = useNavigation();
+  const handleRegister =()=>{
+    const user ={
+      name: name,
+      email:email,
+      password:password,
+    }
+    axios.post("http://localhost:3000/register",user).then((response)=>{
+      console.log(response);
+      Alert.alert("Registeration successfull","You have been registred successfully")
+      setEmail("");
+      setName("");
+      setPassword("");
+    }).catch((error)=>{
+      Alert.alert("Registration Failed","An error occured during registration");
+      console.log("error",error);
+    })
+  }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", alignItems: "center" }} >
       <View style={{ marginTop: 50 }} >
@@ -112,7 +130,7 @@ const RegisterScreen = () => {
                 size={24}
                 color="gray" />
               <TextInput
-              secureTextEntry={true}
+                secureTextEntry={true}
                 style={{
                   color: "gray",
                   marginVertical: 10,
@@ -128,7 +146,9 @@ const RegisterScreen = () => {
 
         </View>
         <View style={{ marginTop: 45 }} >
-          <Pressable style={{
+          <Pressable 
+          onPress={handleRegister}
+          style={{
             width: 200,
             backgroundColor: "black",
             padding: 15,
@@ -151,7 +171,9 @@ const RegisterScreen = () => {
 
             }} >Register</Text>
           </Pressable>
-          <Pressable onPress={() => navigation.goBack()} style={{ marginTop: 10 }} >
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={{ marginTop: 10 }} >
             <Text
               style={{
                 textAlign: "center",

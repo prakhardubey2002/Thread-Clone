@@ -48,6 +48,9 @@ app.post("/register", async (req, res) => {
         sendVerificationEmail(newUSer.email, newUSer.verificationToken);
 
         res.status(200).json({ message: "Registration succesful" })
+        if(res.status==200){
+            console.log("Registration succesful");
+        }
     }
     catch (error) {
         console.log(`Error : ${error}`);
@@ -61,7 +64,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
         service: "gmail",
         auth: {
             user: process.env.GOOGLE_EMAIL,
-            password: process.env.GOOGLE_PASSWORD
+            pass: process.env.GOOGLE_PASSWORD
         }
     })
     //compose the email message
@@ -71,9 +74,48 @@ const sendVerificationEmail = async (email, verificationToken) => {
         subject: "Email Verification",
         text: `Please click on the following link to verify your email http://localhost:3000/verify/${verificationToken}`
     }
-    try{
+    try {
         await transporter.sendMail(mailOptions);
-    }catch(error){
-        console.log("error sending email",error);
+    } catch (error) {
+        console.log("error sending email", error);
     }
 }
+app.get("/verify/:token", async (req, res) => {
+    try {
+        const token = req.params.token;
+        const user = await User.findOne({ verificationToken: token });
+        if (!user) {
+            return user.status(404).json({ message: "Invalid token" })
+        }
+        user.verified = true;
+        user.verificationToken = undefined;
+        await user.save();
+        res.status(200).json({ message: "Email verified successfully" });
+
+    }
+    catch (error) {
+        console.log("error getting token", error);
+        res.status(500).json({ message: "Email verification failed" });
+    }
+});
+const generateSecretKey = () => {
+    const secretKey = crypto.randomBytes(32).toString("hex");
+    return secretKey;
+};
+const secretKey = generateSecretKey();
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            res.status(404).json({ message: "Invalid Email" })
+        }
+        if (user.password !== password) {
+            res.status(404).json({ message: "Invalid password" })
+        }
+        const token = jwt.sign({ userId: user._id }, secretKey);
+        res.status(200).json({ token })
+    } catch (error) {
+        res.status(500).json({ message: "Login Failed" })
+    }
+})
