@@ -10,21 +10,21 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigation = useNavigation();
-  const handleRegister =()=>{
-    const user ={
+  const handleRegister = () => {
+    const user = {
       name: name,
-      email:email,
-      password:password,
+      email: email,
+      password: password,
     }
-    axios.post("http://localhost:3000/register",user).then((response)=>{
+    axios.post("http://localhost:3000/register", user).then((response) => {
       console.log(response);
-      Alert.alert("Registeration successfull","You have been registred successfully")
+      Alert.alert("Registeration successfull", "You have been registred successfully")
       setEmail("");
       setName("");
       setPassword("");
-    }).catch((error)=>{
-      Alert.alert("Registration Failed","An error occured during registration");
-      console.log("error",error);
+    }).catch((error) => {
+      Alert.alert("Registration Failed", "An error occured during registration");
+      console.log("error", error);
     })
   }
   return (
@@ -146,21 +146,21 @@ const RegisterScreen = () => {
 
         </View>
         <View style={{ marginTop: 45 }} >
-          <Pressable 
-          onPress={handleRegister}
-          style={{
-            width: 200,
-            backgroundColor: "black",
-            padding: 15,
-            marginTop: 40,
-            marginLeft: "auto",
-            marginRight: "auto",
-            borderRadius: 6,
-            flexDirection: "row",
-            gap: 8,
-            justifyContent: "center",
-            alignItems: "center"
-          }} >
+          <Pressable
+            onPress={handleRegister}
+            style={{
+              width: 200,
+              backgroundColor: "black",
+              padding: 15,
+              marginTop: 40,
+              marginLeft: "auto",
+              marginRight: "auto",
+              borderRadius: 6,
+              flexDirection: "row",
+              gap: 8,
+              justifyContent: "center",
+              alignItems: "center"
+            }} >
             <Ionicons name="person" size={20} color="white" />
             <Text style={{
               color: "#fff",

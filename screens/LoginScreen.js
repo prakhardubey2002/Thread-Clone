@@ -1,12 +1,49 @@
-import { Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken")//using key value pair name used in time of login when setting value in async storage
+        if (token) {
+          setTimeout(() => {
+            navigation.replace("Home");
+          }, 400)
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+    checkLoginStatus();
+    
+  }, [])
+
+  const handleLogin = () => {
+    const data = {
+      email: email,
+      password: password,
+    }
+    axios.post("http://localhost:3000/login", data).then((response) => {
+      console.log(response);
+      const token = response.data.token;
+      AsyncStorage.setItem("authToken", token);//async storage like key value pair
+      navigation.navigate("Home")
+      setEmail("");
+      setPassword("");
+    }).catch((error) => {
+      Alert.alert("Error: Login Failed")
+      console.log(`Error : ${error}`)
+    })
+  }
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", alignItems: "center" }} >
       <View style={{ marginTop: 50 }} >
@@ -98,19 +135,21 @@ const LoginScreen = () => {
           </View>
         </View>
         <View style={{ marginTop: 45 }} >
-          <Pressable style={{
-            width: 200,
-            backgroundColor: "black",
-            padding: 15,
-            marginTop: 40,
-            marginLeft: "auto",
-            marginRight: "auto",
-            borderRadius: 6,
-            flexDirection: "row",
-            gap: 8,
-            justifyContent: "center",
-            alignItems: "center"
-          }} >
+          <Pressable
+            onPress={handleLogin}
+            style={{
+              width: 200,
+              backgroundColor: "black",
+              padding: 15,
+              marginTop: 40,
+              marginLeft: "auto",
+              marginRight: "auto",
+              borderRadius: 6,
+              flexDirection: "row",
+              gap: 8,
+              justifyContent: "center",
+              alignItems: "center"
+            }} >
             <AntDesign name="login" size={20} color="white" />
             <Text style={{
               color: "#fff",
