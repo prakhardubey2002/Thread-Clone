@@ -16,7 +16,7 @@ const LoginScreen = () => {
         const token = await AsyncStorage.getItem("authToken")//using key value pair name used in time of login when setting value in async storage
         if (token) {
           setTimeout(() => {
-            navigation.replace("Home");
+            navigation.replace("Main");
           }, 400)
         }
       } catch (error) {
@@ -24,7 +24,7 @@ const LoginScreen = () => {
       }
     }
     checkLoginStatus();
-    
+
   }, [])
 
   const handleLogin = () => {
