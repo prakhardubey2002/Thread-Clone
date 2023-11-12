@@ -19,7 +19,7 @@ const StackNavigator = () => {
     function BottomTabs() {
         return (
             <Tab.Navigator>
-                <Tab.Screen name='Home'
+                <Tab.Screen name='Home'// this is first screen and this will be rendered by default when BoottomTabs function is passed in navigator screen section
                     component={HomeScreen}
                     options={
                         {
