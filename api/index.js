@@ -120,3 +120,20 @@ app.post("/login", async (req, res) => {
         res.status(500).json({ message: "Login Failed" })
     }
 })
+
+//endpoint to access all users except the logged in user
+app.get("/user/:userid",(req,res)=>{
+    try{
+        const loggedInUserId=req.params.userid;
+        User.find({_id:{$ne:loggedInUserId}})
+        .then((users)=>{
+            res.status(200).json(users);
+        })
+        .catch((error)=>{
+            console.log("Error",error);
+            res.status(500).json("error");
+        })
+    }catch(error){
+        res.status(500).json({message:`Error : ${error}`})
+    }
+})

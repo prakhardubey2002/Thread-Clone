@@ -38,7 +38,7 @@ const StackNavigator = () => {
                     component={ThreadScreen}
                     options={
                         {
-                            tabBarLabel: "Create Thread",
+                            tabBarLabel: "Create",
                             tabBarLabelStyle: { color: "black" },
                             headerShown: false,
                             tabBarIcon: ({ focused }) =>// focused will crender icon according to focus
