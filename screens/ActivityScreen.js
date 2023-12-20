@@ -1,27 +1,37 @@
 import { Alert, Image, KeyboardAvoidingView, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwt_decode from "jwt-decode"
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { useContext } from 'react';
+import { UserType } from "../UserContext";
+import User from '../components/User';
 const ActivityScreen = () => {
   const [selectedButton, setSelectedButton] = useState("people");
   const [content, setContent] = useState("People Content");
-  const [users,setUsers]=useState([]);
+  const [users, setUsers] = useState([]);
+  const { userId, setUserId } = useContext(UserType);
   const handleButtonClick = (buttonname) => {
     setSelectedButton(buttonname);
   }
   useEffect(() => {
     const fetchUsers = async () => {
-      const token = AsyncStorage.getItem("authToken");
-      const decodedToken = jwt_decode(token);
+      const token = await AsyncStorage.getItem("authToken");
+      const decodedToken = jwtDecode(token);
       const userId = decodedToken.userId;
-      setUserID(userId);
-      axios.get(`http://localhost:3000/users/${userId}`)
-      .then((response) => {
-        setUsers(response.data)
-      })
+      setUserId(userId);
+      axios
+        .get(`http://localhost:3000/user/${userId}`)
+        .then((response) => {
+          setUsers(response.data)
+        }).catch((error) => {
+          console.log(`Error : ${error}`);
+        })
     }
+    fetchUsers();
+    console.log(`HI`);
   }, [])
+  console.log(`Users: ${users}`);
   return (
     <ScrollView style={{ marginTop: 50 }} >
       <View style={{ padding: 10 }} >
@@ -119,6 +129,17 @@ const ActivityScreen = () => {
             </Text>
           </TouchableOpacity>
 
+        </View>
+        <View>
+          {selectedButton === "people" && (
+            <View style={{ marginTop: 20 }} >
+              {
+                users?.map((item, index) => (
+                  <User key={index} item={item} />
+                ))
+              }
+            </View>
+          )}
         </View>
       </View>
     </ScrollView >
