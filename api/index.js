@@ -125,7 +125,7 @@ app.post("/login", async (req, res) => {
 app.get("/user/:userid",(req,res)=>{
     try{
         const loggedInUserId=req.params.userid;
-        User.find({_id:{$ne:loggedInUserId}})
+        User.find({_id:{$ne:loggedInUserId}})//$ne mean not equal to
         .then((users)=>{
             res.status(200).json(users);
         })

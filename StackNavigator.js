@@ -53,7 +53,7 @@ const StackNavigator = () => {
                     component={ActivityScreen}
                     options={
                         {
-                            tabBarLabel: "Activity",
+                            tabBarLabel: "Activitys",
                             tabBarLabelStyle: { color: "black" },
                             headerShown: false,
                             tabBarIcon: ({ focused }) =>// focused will crender icon according to focus
