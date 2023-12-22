@@ -48,7 +48,7 @@ app.post("/register", async (req, res) => {
         sendVerificationEmail(newUSer.email, newUSer.verificationToken);
 
         res.status(200).json({ message: "Registration succesful" })
-        if(res.status==200){
+        if (res.status == 200) {
             console.log("Registration succesful");
         }
     }
@@ -122,18 +122,44 @@ app.post("/login", async (req, res) => {
 })
 
 //endpoint to access all users except the logged in user
-app.get("/user/:userid",(req,res)=>{
-    try{
-        const loggedInUserId=req.params.userid;
-        User.find({_id:{$ne:loggedInUserId}})//$ne mean not equal to
-        .then((users)=>{
-            res.status(200).json(users);
-        })
-        .catch((error)=>{
-            console.log("Error",error);
-            res.status(500).json("error");
-        })
-    }catch(error){
-        res.status(500).json({message:`Error : ${error}`})
+app.get("/user/:userid", (req, res) => {
+    try {
+        const loggedInUserId = req.params.userid;
+        User.find({ _id: { $ne: loggedInUserId } })//$ne mean not equal to
+            .then((users) => {
+                res.status(200).json(users);
+            })
+            .catch((error) => {
+                console.log("Error", error);
+                res.status(500).json("error");
+            })
+    } catch (error) {
+        res.status(500).json({ message: `Error : ${error}` })
     }
 })
+
+//endpoint to follow a user
+app.post("/follow", async (req, res) => {
+    const { currentUserId, selectedUserID } = req.body;
+
+    try {
+        await User.findByIdAndUpdate(selectedUserID, {//find user by that id
+            $push: { followers: currentUserId },// push user id in followers array
+        });
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "error in following a user" });
+    }
+});
+//endpoint to unfollow a user
+app.post("/users/unfollow",async (req,res)=>{
+    const {loggedInUserId,targetUserId}=req.body;
+    try{
+        await User.findByIdAndUpdate(targetUserId,{
+            $pull:{followers:loggedInUserId},//remove logged in userid from followers array of targetuserid 
+        });
+    }catch(error){
+        res.status(500).json({ message: "error in unfollowing a user" });
+    }
+});
